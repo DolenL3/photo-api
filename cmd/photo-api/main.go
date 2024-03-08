@@ -6,16 +6,17 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"photoapi/internal/config"
-	httpcontroller "photoapi/internal/controllers/http-controller"
-	photoapi "photoapi/internal/photo-api"
-	"photoapi/internal/photo-api/storage/sqlite"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
+
+	"photoapi/internal/config"
+	httpcontroller "photoapi/internal/controllers/http-controller"
+	photoapi "photoapi/internal/photo-api"
+	"photoapi/internal/photo-api/storage/sqlite"
 )
 
 func main() {
