@@ -3,10 +3,12 @@ package httpcontroller
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	swag "github.com/swaggest/swgui/v3"
 	"go.uber.org/zap"
 
 	"photoapi/internal/config"
@@ -33,15 +35,23 @@ func New(router *gin.Engine, service *photoapi.PhotoService, config *config.HTTP
 // Start starts HTTPController.
 func (h *HTTPController) Start() error {
 	logger := zap.L()
+	currentPath, err := os.Getwd()
+	if err != nil {
+		logger.Warn("Can't get current path")
+	}
+	docsPath := currentPath + "/docs/"
+	h.router.StaticFile("/static/openapi.json", docsPath+"openapi.json")
 	// Retrieves all photos.
 	h.router.GET("/photos", h.getPhotos)
 	// Uploads new photo.
 	h.router.POST("/photos", h.uploadPhoto)
 	// Deletes existing photo.
 	h.router.DELETE("/photos/:id", h.deletePhoto)
+	// Opens API reference.
+	h.router.GET("/docs/*any", gin.WrapH(swag.New("PhotoAPI", "/static/openapi.json", "/docs/")))
 
 	logger.Info(fmt.Sprintf("http server is up and running on %s", h.config.Host))
-	err := h.router.Run(h.config.Host)
+	err = h.router.Run(h.config.Host)
 	if err != nil {
 		return errors.Wrap(err, "run router")
 	}

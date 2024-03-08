@@ -1,0 +1,137 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "Photo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "bytes": {
+            "type": "string",
+            "example": "base64"
+          },
+          "preview": {
+            "type": "string",
+            "example": "base64"
+          }
+        }
+      },
+      "Photos": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Photo"
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "info": {
+    "description": "Documentation for PhotoAPI service",
+    "title": "PhotoAPI Service",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "photo",
+      "description": "Operations on photos"
+    }
+  ],
+  "paths": {
+    "/photos": {
+      "get": {
+        "tags": [
+          "photo"
+        ],
+        "summary": "Retrieve all photos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photos"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "photo"
+        ],
+        "summary": "Upload new photo",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bytes": {
+                    "type": "string",
+                    "example": "base64 encoded image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/photos/{id}": {
+      "delete": {
+        "tags": [
+          "photo"
+        ],
+        "summary": "Delete existing client",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "uuid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ import (
 	_ "image/gif"
 	"image/jpeg"
 	_ "image/jpeg"
+	_ "image/png"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
